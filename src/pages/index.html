@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://kit.fontawesome.com/e4771a6adc.js" crossorigin="anonymous"></script>
+    <title>Site de jogos educativos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mogra&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "Mogra", system-ui;
+            color: #FFFFFF;
+        }
+
+        html {
+            scroll-padding-top: 100px;
+        }
+
+        body {
+            background-color: #041C29;
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        header {
+            background-color: #041C29;
+            height: 100px;
+            width: 100%;
+            display:flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            border-bottom: 1px solid #FFFFFF;
+            box-sizing: border-box; 
+            padding: 0 30px 0 30px; 
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        #menu-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            column-gap: 20px;
+        }
+
+        #menu-container #open-menu-hbars {
+            display: grid;
+            grid-template-columns: 1fr;
+            row-gap: 5px;
+        }
+
+        #menu-container .hbar {
+            width: 25px;
+            height: 3px;
+            border-radius: 2px;
+            background-color: #FFFFFF;
+        }
+
+        #logo {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            column-gap: 5px;
+        }
+
+        #logo .gif {
+            width: 40px;
+            height: 40px;
+            background-color: #00FFFF;
+            border-radius: 30px;
+        }
+
+        #logo .name {
+            font-size: 12px;
+            vertical-align: center;
+        }
+
+        #search-bar-container {
+            display: flex;
+            flex-direction: row;
+            width: auto;
+            height: 44px;
+        }
+
+        #search-bar {
+            background-color: #FFFFFF;
+            color: #000000;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 15px;
+            border: none;
+            padding: 0 20px;
+            width: 300px;
+            border-radius: 22px;
+            display: flex;
+
+        }
+        #search-bar:focus {
+            border: none;
+            outline: none;
+        }
+
+        .fa-magnifying-glass {
+            background-color: #1260A8;
+            font-size: 15px;
+            padding: 14.5px;
+            border-radius: 21.5px;
+            margin: 0 0 0 -43px;
+        }
+
+        #main {
+            margin: 100px 0 0 0;
+        }
+
+        #side-bar {
+            background-color: #074362;
+            position: fixed;
+            width: 350px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            row-gap: 10px;
+            box-sizing: border-box;
+            padding: 10px 30px;
+        }
+
+        #side-bar .option {
+            display: grid;
+            grid-template-columns: 20px 150px;
+            column-gap: 10px;
+            align-items: center;
+        }
+
+        #side-bar .icon {
+            width: 20px;
+            height: 20px;
+            background-color: #000000;
+        }
+
+        #side-bar a {
+            padding: 5px 0;
+        }
+
+        #media-container {
+            font-size: 18px;
+            display: grid;
+            margin: 0 0 0 350px;
+        }
+
+        .content-container {
+            padding: 25px 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            row-gap: 10px;
+            overflow: hidden;
+        }
+        .content-container:hover {
+            transition: 0.3s;
+            background-color: #2A66AD;
+            overflow: auto;
+        }
+
+        .game-categories {
+            margin: 0 0 0 20px;
+        }
+
+        .games-container {
+            display: flex;
+            flex-direction: row;
+            column-gap: 20px;
+        }
+
+        .game-image {
+            width: 320px;
+            height: 160px;
+            background-color: #074362;
+            border-radius: 10px;
+        }
+
+        .game-anchor {
+            display: grid;
+            row-gap: 10px;
+        }
+        .game-anchor:hover .game-image{
+            transition: 0.3s;
+            box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+        }
+        .game-anchor:hover .game-name{
+            transition: 0.3s;
+            font-size: 105%;
+        }
+
+        .game-container h4 {
+            text-align: center;
+        }
+
+        .game-name {
+            display: flex;
+            justify-content: center;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <!--Barra de navegação principal-->
+    <header>
+        <!--Logo do site-->
+        <div id="menu-container">
+            <!--Abrir barra de navegação lateral-->
+            <a href="#" id="open-menu-hbars">
+                <div class="hbar"></div>
+                <div class="hbar"></div>
+                <div class="hbar"></div>
+            </a>
+
+            <!--Logotipo-->
+            <div id="logo">
+                <!--Gif animado (planeta)-->
+                <div class="gif">
+                    <div></div>
+                </div>
+
+                <!--Nome do site-->
+                <div class="name">
+                    <h1>MEU PLANETINHA</h1>
+                </div>
+            </div>
+        </div>
+
+        <!--Barra de pesquisa-->
+        <div id="search-bar-container">
+            <input id="search-bar" type="search" placeholder="Pesquisar">
+
+            <!--Lupa ícone-->
+            <div>
+                <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
+            </div>
+        </div>    
+    </header>
+
+    <!--Conteúdo principal-->
+    <div id="main">
+        <!--Barra de navegação lateral-->
+        <aside id="side-bar">
+            <!--Início-->
+            <div class="option">
+                <div class="icon"></div>
+                <a href="#week-games">Início</a>
+            </div>
+
+            <!--Português-->
+            <div class="option">
+                <div class="icon"></div>
+                <a href="#portuguese-games">Português</a>
+            </div>
+
+            <!--Digitação-->
+            <div class="option">
+                <div class="icon"></div>
+                <a href="#typing-games">Digitação</a>
+            </div>
+
+            <!--Matemática-->
+            <div class="option">
+                <div class="icon"></div>
+                <a href="#math-games">Matemática</a>
+            </div>
+
+            <!--Biologia-->
+            <div class="option">
+                <div class="icon"></div>
+                <a href="#biology-games">Biologia</a>
+            </div>
+        </aside>
+        
+        <!--Conteúdo (jogos)-->
+        <div id="media-container">
+            <!--Jogos da semana-->
+            <div class="content-container" id="week-games">
+                <!--Categoria-->
+                <div class="categories-container">
+                    <!--Nome da categoria-->
+                    <h3 class="game-categories">
+                        Jogos populares da semana:
+                    </h3>
+                </div>
+
+                <!--Conjunto de jogos-->
+                <div class="games-container">
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!--Português-->
+            <div class="content-container" id="portuguese-games">
+                <!--Categoria-->
+                <div class="categories-container">
+                    <!--Nome da categoria-->
+                    <h3 class="game-categories">
+                        Português:
+                    </h3>
+                </div>
+
+                <!--Conjunto de jogos-->
+                <div class="games-container">
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!--Digitação-->
+            <div class="content-container" id="typing-games">
+                <!--Categoria-->
+                <div class="categories-container">
+                    <!--Nome da categoria-->
+                    <h3 class="game-categories">
+                        Digitação:
+                    </h3>
+                </div>
+
+                <!--Conjunto de jogos-->
+                <div class="games-container">
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!--Matemática-->
+            <div class="content-container" id="math-games">
+                <!--Categoria-->
+                <div class="categories-container">
+                    <!--Nome da categoria-->
+                    <h3 class="game-categories">
+                        Matemática:
+                    </h3>
+                </div>
+
+                <!--Conjunto de jogos-->
+                <div class="games-container">
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!--Biologia-->
+            <div class="content-container" id="biology-games">
+                <!--Categoria-->
+                <div class="categories-container">
+                    <!--Nome da categoria-->
+                    <h3 class="game-categories">
+                        Biologia:
+                    </h3>
+                </div>
+
+                <!--Conjunto de jogos-->
+                <div class="games-container">
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!--Jogo-->
+                    <div class="game-container">
+                        <!--Ancora para a página de jogatina-->
+                        <a href="#" class="game-anchor">
+                            <!--Imagem ilustrativa-->
+                            <div class="game-image"></div>
+
+                            <!--Nome do jogo-->
+                            <div class="game-name">
+                                <h4>Jogo</h4>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Rodapé-->
+        <footer>
+
+        </footer>
+    </div>
+</body>
+</html>
