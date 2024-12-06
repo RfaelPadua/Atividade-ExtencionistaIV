@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo de Matemática</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+            body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      /* justify-content: center;
+      align-items: center; */
+      height: 100vh;
+      background-color: #ffffff;
+    }
+    canvas {
+      border: 1px solid white;
+    }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+    const screenWidth = 450;
+    const screenHeight = 800;
+
+
+    var config = {
+        type: Phaser.AUTO,
+        width: screenWidth,
+        height: screenHeight, 
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 0 },
+                debug: false
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    const game = new Phaser.Game(config);
+
+    let player;
+    let cursors;
+    let asteroids;
+    let score = 0;
+    let life = 3;
+    let scoreText;
+    let lifeText;
+    let inputText = '';
+    let inputField;
+
+    function preload ()
+    {
+
+    }
+    function create ()
+    {
+        //Criando o player
+  
+        player = this.add.graphics();
+        player.fillStyle(0x0000ff, 1);
+        player.fillRect(0, 0, 50, 50);
+        this.physics.add.existing(player);
+        player.body.setCollideWorldBounds(true);
+
+        player.x = 200;
+        player.y = 700;
+
+        //Criando os asteroides 
+        asteroids = this.physics.add.group();
+   
+
+        //Criando o texto de vida
+        lifeText = this.add.text(300, 16, 'Life: 3', { fontSize: '32px', fill: '#ffffff' });
+        lifeText.x = screenWidth - (lifeText.width + 16); 
+        //Criando o texto de pontuação
+        scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#ffffff' });
+
+        //Criando o campo de texto
+        inputField = this.add.text(225, 790 - scoreText.height, '', { fontSize: '32px', fill: '#FFF' });
+        inputField.setOrigin(0.5, 0); // Centraliza o texto horizontalmente
+        //Criando o evento de input
+        this.input.keyboard.on('keydown', handleInput, this);
+
+        //Criando o evento de spawn de asteroides
+        this.time.addEvent({
+            delay: 2000,
+            callback: spawnAsteroid,
+            callbackScope: this,
+            loop: true
+        });
+
+        //Criando o evento de colisão
+        this.physics.add.collider(player, asteroids, function (player, asteroid) {
+            life -= 1;
+            lifeText.setText('Life: ' + life);
+            asteroid.text.destroy();
+            asteroid.destroy();
+        });
+
+
+
+        //Criando o evento de colisão
+        
+
+    }
+    function update ()
+    {
+        // Atualizando a posição dos asteroides
+        asteroids.children.iterate(function (asteroid) {
+            if (asteroid) {
+                // Calculando a direção do movimento
+                const direction = new Phaser.Math.Vector2(player.x - asteroid.x + 25, player.y - asteroid.y + 25);
+                direction.normalize();
+                const speed = 1/2;
+                asteroid.x += direction.x * speed;
+                asteroid.y += direction.y * speed;
+
+                asteroid.text.x = asteroid.x - asteroid.text.width / 2;
+                asteroid.text.y = asteroid.y + 20;
+
+
+            }
+        });
+
+        checkAnswer();
+        
+        // checkGameOver();
+ 
+
+    }
+
+    function checkGameOver() {
+        if (life <= 0) {
+            this.scene.restart();
+            life = 3;
+            score = 0;
+            scoreText.setText('Score: 0');
+            lifeText.setText('Life: 3');
+        }
+    }
+
+    function handleInput(event) {
+        if (event.key === 'Enter') {
+            console.log(inputText);
+            inputText = '';
+            inputField.setText(inputText);
+        } else if (event.key === 'Backspace') {
+            inputText = inputText.slice(0, -1);
+            inputField.setText(inputText);
+        } else if (event.key.match(/[0-9]/)) {
+            inputText += event.key;
+            inputField.setText(inputText);
+        }
+    }
+
+    function checkAnswer() {
+        asteroids.children.iterate(function (asteroid) {
+            if (asteroid && asteroid.result === parseInt(inputText)) {
+                asteroid.text.destroy();
+                asteroid.destroy();
+                score += 10;
+                scoreText.setText('Score: ' + score);
+                inputText = '';
+                inputField.setText(inputText);
+            }
+        });
+    }
+
+    function spawnAsteroid() {
+        const x = Phaser.Math.Between(screenWidth * 0.1, screenWidth * 0.9);
+        const num1 = Phaser.Math.Between(1, 10);
+        const num2 = Phaser.Math.Between(1, 10);
+        const result = num1 + num2;
+
+        const asteroid = this.add.graphics();
+        asteroid.fillStyle(0xff0000, 1);
+        this.physics.add.existing(asteroid);
+        asteroid.fillCircle(0, 0, 20);
+        asteroid.x = x;
+        asteroid.y = -50;
+
+
+        this.physics.add.existing(asteroid);
+        asteroid.body.setCircle(20);
+        asteroid.body.setVelocity(0, 100);
+        asteroid.result = result;
+
+        const text = this.add.text(x, 0, `${num1} + ${num2}`, { fontSize: '20px', fill: '#ffffff' });
+        asteroid.text = text;
+
+
+        asteroids.add(asteroid);
+    }
+
+</script>
+</body>
