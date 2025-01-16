@@ -3,7 +3,33 @@ export default class BootScene extends Phaser.Scene {
     super('BootScene');
   }
 
+  preload() {
+    // Carregar recursos aqui, se necessário
+    this.load.spritesheet('loading', 'assets/loading.png', { frameWidth: 640, frameHeight: 640 });
+  }
+
   create() {
-      this.scene.start('MenuScene'); // Vai para a MenuScene
+
+    // colocar um cor
+    this.cameras.main.setBackgroundColor('#000000');
+    
+    // Adiciona um gif de loading
+    this.anims.create({
+      key: 'loading',
+      frames: this.anims.generateFrameNumbers('loading', { start: 0, end: 7 }),
+      frameRate: 15,
+      repeat: -1,
+    });
+
+    // // Adicione a animação ao centro da tela
+    // const loadingImage = this.add.sprite(this.scale.width / 2, this.scale.height / 2, 'loading').setOrigin(0.5);
+    // loadingImage.setScale(0.15);
+    // loadingImage.play('loading');
+
+    
+    // Adiciona um delay de 1 segundo para ir para a próxima cena
+    this.time.delayedCall(400, () => {
+      this.scene.start('PreloadScene'); // Vai para a PreloadScene
+    });
   }
 }

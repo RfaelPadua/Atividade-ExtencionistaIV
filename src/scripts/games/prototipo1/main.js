@@ -2,6 +2,7 @@ import BootScene from './scenes/BootScene.js';
 import MenuScene from './scenes/MenuScene.js';
 import GameScene from './scenes/GameScene.js';
 import GameOverScene from './scenes/GameOverScene.js';
+import PreloadScene from './scenes/PreloadScene.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -15,7 +16,7 @@ const config = {
         debug: false
       }
     },
-    scene: [BootScene, MenuScene, GameScene, GameOverScene],
+    scene: [BootScene, PreloadScene, MenuScene, GameScene, GameOverScene],
     backgroundColor: '#000000',
     scale: {
       mode: Phaser.Scale.FIT,
