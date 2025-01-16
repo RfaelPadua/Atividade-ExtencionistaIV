@@ -1,13 +1,10 @@
-import BootScene from './scenes/BootScene.js';
-import MenuScene from './scenes/MenuScene.js';
 import GameScene from './scenes/GameScene.js';
-import GameOverScene from './scenes/GameOverScene.js';
-import PreloadScene from './scenes/PreloadScene.js';
+
 
 const config = {
     type: Phaser.AUTO,
-    width: 450,
-    height: 700,
+    width: 1000,
+    height: 800,
     parent: 'game-container',
     physics: {
       default: 'arcade',
@@ -16,7 +13,7 @@ const config = {
         debug: false
       }
     },
-    scene: [BootScene, PreloadScene, MenuScene, GameScene, GameOverScene],
+    scene: [GameScene],
     backgroundColor: '#000000',
     scale: {
       mode: Phaser.Scale.FIT,
