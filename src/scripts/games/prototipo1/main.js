@@ -21,10 +21,12 @@ const config = {
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    render: {
+      pixelArt: false,
+      antialias: true,
+      willReadFrequently: true
     }
   };
   
-  const game = new Phaser.Game(config);
-
-
-  
+const game = new Phaser.Game(config);

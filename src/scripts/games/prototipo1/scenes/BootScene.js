@@ -21,10 +21,6 @@ export default class BootScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    // // Adicione a animação ao centro da tela
-    // const loadingImage = this.add.sprite(this.scale.width / 2, this.scale.height / 2, 'loading').setOrigin(0.5);
-    // loadingImage.setScale(0.15);
-    // loadingImage.play('loading');
 
     
     // Adiciona um delay de 1 segundo para ir para a próxima cena
