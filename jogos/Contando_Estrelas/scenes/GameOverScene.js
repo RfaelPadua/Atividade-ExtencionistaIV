@@ -13,17 +13,18 @@ export default class GameOverScene extends Phaser.Scene {
     this.add.image(0, 0, 'fundo_menu').setOrigin(0).setDisplaySize(width, height); // Ajuste a imagem ao espaço do jogo
     const gameover = this.add.image(width / 2, height / 2, 'gameover').setDisplaySize(width, height); // Adicione a imagem de game over ao centro do jogo
 
-    const botaoJogar = this.add.image(0, 0, 'botao_jogar').setOrigin(0).setDisplaySize(width, height);
+    const botaoContinuar = this.add.image(0, 50, 'botao_continuar').setOrigin(0).setDisplaySize(width, height);
 
-    botaoJogar.setInteractive({ useHandCursor: true, pixelPerfect: true });
-    botaoJogar.on('pointerdown', () => {
-      this.fadeOutElements([gameover, botaoJogar], () => {
+
+    botaoContinuar.setInteractive({ useHandCursor: true, pixelPerfect: true });
+    botaoContinuar.on('pointerdown', () => {
+      this.fadeOutElements([gameover, botaoContinuar], () => {
         this.scene.start('MenuScene');
       });
     });
 
     // Exibir pontuação e onda
-    this.add.text(width / 2, height / 2 + 55, `${this.score}`, { fontSize: '32px', fill: '#ffffff', fontFamily: 'Exo_Space' }).setOrigin(0.5);
+    this.add.text(width / 2, height / 2 + 40, `${this.score}`, { fontSize: '32px', fill: '#ffffff', fontFamily: 'Exo_Space' }).setOrigin(0.5);
   }
 
   fadeOutElements(elements, callback) {

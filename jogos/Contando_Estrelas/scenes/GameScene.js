@@ -57,7 +57,7 @@ export default class GameScene extends Phaser.Scene {
         // Animação para mover o player para a posição desejada
         this.tweens.add({
             targets: this.player,
-            y: height * 0.72,
+            y: height * 0.7,
             duration: 2000,
             ease: 'Power2',
             onComplete: () => {
@@ -73,12 +73,15 @@ export default class GameScene extends Phaser.Scene {
         // Criar painel de vida e pontuação
         this.add.image(0, 0, 'painel').setOrigin(0).setDisplaySize(width, height); // Ajuste a imagem ao espaço do jogo
 
+        
         // Criar texto de vida
-        this.lifeText = this.add.text(width * 0.72, height * 0.92, 'Life: 3', { fontSize: '32px', fill: '#ffffff', fontFamily: 'Exo_Space' });
+        this.lifeText = this.add.text(width * 0.43, height * 0.867, '3', { fontSize: '22px', fill: '#ffffff', fontFamily: 'Exo_Space' });
 
         // Criar texto de pontuação
-        this.scoreText = this.add.text(width * 0.01, height * 0.92, 'Pontuação: 0', { fontSize: '32px', fill: '#ffffff', fontFamily: 'Exo_Space' });
+        this.scoreText = this.add.text(width * 0.27, height * 0.819, '0', { fontSize: '22px', fill: '#ffffff', fontFamily: 'Exo_Space' });
 
+
+        this.ondaText = this.add.text(width * 0.75, height * 0.845, this.onda, { fontSize: '22px', fill: '#fff' });
         // Campo de entrada de texto
         this.inputField = this.add.text(width * 0.5, height * 0.85, '', { fontSize: '32px', fill: '#FFF', fontFamily: 'Exo_Space' });
         this.inputField.setOrigin(0.5, 0);
@@ -254,7 +257,7 @@ export default class GameScene extends Phaser.Scene {
                     asteroid.text.destroy();
                     asteroid.destroy();
                     this.score += 10;
-                    this.scoreText.setText('Pontuação: ' + this.score);
+                    this.scoreText.setText(this.score);
                     this.tiroDisparado = false;
 
                     // Criar o sprite de explosão na posição do asteroide
@@ -313,7 +316,7 @@ export default class GameScene extends Phaser.Scene {
         explosao.play('explosao_anim');
 
         this.life -= 1;
-        this.lifeText.setText('Life: ' + this.life);
+        this.lifeText.setText(this.life);
         asteroid.text.destroy();
         asteroid.destroy();
 

@@ -18,6 +18,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('simbolos', 'assets/Simbolos.png');
         this.load.image('titulo', 'assets/Titulo.png');
         this.load.image('botao_jogar', 'assets/Botao_Jogar.png');
+        this.load.image('botao_continuar', 'assets/CONTINUAR.png');
         this.load.image('painel', 'assets/Painel.png');
         this.load.image('gameover', 'assets/Game_Over.png');
         
@@ -74,7 +75,7 @@ export default class PreloadScene extends Phaser.Scene {
 
         // Garantir que as animações foram criadas
         this.time.delayedCall(500, () => {
-            this.scene.start('MenuScene');
+            this.scene.start('GameScene');
         });
     }
 
