@@ -14,7 +14,7 @@ export default class GameScene extends Phaser.Scene {
         this.screenHeight;
         this.tiro;
         this.onda;
-        this.velocidade = 1000;
+        this.velocidade = 500;
         this.qntBaseInimigos = 5;
         this.inimigosRestantes;
         this.fundoMovimento; // Adicionar variável para o fundo em movimento
