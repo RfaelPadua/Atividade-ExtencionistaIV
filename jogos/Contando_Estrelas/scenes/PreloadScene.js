@@ -75,7 +75,7 @@ export default class PreloadScene extends Phaser.Scene {
 
         // Garantir que as animações foram criadas
         this.time.delayedCall(500, () => {
-            this.scene.start('GameScene');
+            this.scene.start('MenuScene');
         });
     }
 
