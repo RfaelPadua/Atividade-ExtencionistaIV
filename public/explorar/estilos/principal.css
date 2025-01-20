@@ -1,0 +1,101 @@
+main {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+}
+
+.alfabeto-inicial,
+.secao-de-jogos {
+  background-color: var(--cor-secundaria);
+  display: flex;
+}
+
+.alfabeto-inicial {
+  flex-direction: row;
+  list-style-type: none;
+  text-decoration: none;
+  justify-content: space-between;
+  padding: 5px 25px;
+  border-radius: 25px;
+  width: 50vw;
+  height: auto;
+}
+
+.alfabeto-inicial > a:link {
+  text-decoration: none;
+}
+
+.alfabeto-inicial li:hover {
+  color: var(--cor-terciaria);
+}
+
+.secao-de-jogos {
+  flex-direction: column;
+  row-gap: 40px;
+  width: 50vw;
+  height: 400px;
+  padding: 25px 25px 40px 25px;
+  border-radius: 25px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  overflow-y: hidden;
+}
+
+.secao-de-jogos:hover {
+  overflow-y: scroll;
+}
+
+.colecao-de-jogos {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  width: auto;
+  height: auto;
+}
+
+.categoria-jgs {
+  padding-left: 10px;
+  font-size: 22px;
+}
+
+.jgs {
+  display: grid;
+  grid-template-columns: repeat(5, 180px);
+  width: 100%;
+  height: auto;
+  overflow-x: hidden;
+  gap: 20px;
+}
+
+.jg {
+  background-color: var(--cor-quartenaria);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+
+  width: 160px;
+  height: 180px;
+  border-radius: 25px;
+  flex-shrink: 0;
+}
+
+.capa-jg {
+  background-color: var(--cor-secundaria);
+
+  width: 130px;
+  height: 100px;
+  border-radius: 25px;
+  margin-top: 15px;
+}
+
+.nome-jg {
+  color: #000000;
+  font-weight: 400;
+
+  width: 140px;
+  height: 40px;
+  text-align: center;
+  overflow: hidden;
+}

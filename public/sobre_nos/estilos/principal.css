@@ -1,0 +1,49 @@
+.secao-sobre {
+  background-color: var(--cor-secundaria);
+  display: flex;
+  flex-direction: column;
+  row-gap: 40px;
+  width: 50vw;
+  height: auto;
+  padding: 25px 25px 40px 25px;
+  border-radius: 25px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.secao-sobre > h2 {
+  text-align: center;
+  font-size: 30px;
+}
+
+.secao-sobre > p {
+  text-align: justify;
+  font-size: 20px;
+}
+
+.desenvolvedores {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.desenvolvedor {
+  display: flex;
+  column-gap: 50px;
+
+  justify-content: space-evenly;
+}
+
+.desenvolvedor > img {
+  width: 100px;
+  height: 100px;
+  float: left;
+}
+
+.desenvolvedor > p {
+  font-size: 16px;
+  text-align: center;
+}
+
+.desenvolvedor span {
+  color: var(--cor-terciaria);
+}
