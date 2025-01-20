@@ -12,3 +12,61 @@
   </body>
 </html>
 
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo de Sílaba</title>
+  
+  <!-- Estilos gerais do site -->
+  <link href="../../estilos/geral.css" rel="stylesheet" />
+  <link href="../../estilos/barra_superior.css" rel="stylesheet" />
+  <link href="./estilos/principal.css" rel="stylesheet" />
+  
+  <!-- Estilos específicos do jogo -->
+  <link rel="stylesheet" type="text/css" href="assets/Exo_Space.css">
+
+  <!-- Biblioteca Phaser -->
+  <script src="phaser.min.js"></script>
+  
+  <!-- Script do Jogo -->
+  <script src="main.js" type="module"></script>
+</head>
+<body>
+
+  <!-- Cabeçalho com barra de navegação -->
+  <header>
+    <nav class="barra-de-navegacao">
+      <div id="logotipo">
+        <img class="imagem-ilustrativa" src="../../midia/meu_planetinha.gif" alt="Logo Gif" />
+        <h1 class="nome">Meu Planetinha</h1>
+      </div>
+
+      <ul class="paginas">
+        <li><a href="../../">Início</a></li>
+        <li><a href="../../explorar/explorar.html">Explorar</a></li>
+        <li><a href="../../sobre_nos/sobre_nos.html">Sobre Nós</a></li>
+      </ul>
+
+      <form>
+        <div class="barra-de-pesquisa">
+          <input type="search" placeholder="Pesquisar" />
+          <button>
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+    </nav>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main>
+    <div id="game-container"></div>
+  </main>
+
+  <!-- Rodapé (pode adicionar conteúdo aqui mais tarde) -->
+  <footer></footer>
+
+</body>
+</html>
