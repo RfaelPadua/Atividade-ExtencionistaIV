@@ -14,7 +14,7 @@ export default class GameScene extends Phaser.Scene {
         this.screenHeight;
         this.tiro;
         this.onda;
-        this.velocidade = 500;
+        this.velocidade = 1000;
         this.qntBaseInimigos = 5;
         this.inimigosRestantes;
         this.fundoMovimento; // Adicionar variável para o fundo em movimento
@@ -308,9 +308,9 @@ export default class GameScene extends Phaser.Scene {
     }
 
     handleCollision(player, asteroid) {
-        // Reproduz a animação de explosão no local da colisão
-        let explosion = this.add.sprite(asteroid.x, asteroid.y, 'explosionSpriteSheet');
-        explosion.play('explosion');
+    // Reproduz a animação de explosão no local da colisão
+        let explosao = this.add.sprite(asteroid.x, asteroid.y, 'explosao');
+        explosao.play('explosao_anim');
 
         this.life -= 1;
         this.lifeText.setText('Life: ' + this.life);
