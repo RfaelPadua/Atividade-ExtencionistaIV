@@ -2,38 +2,36 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 if (!ctx) {
-  console.error("Failed to get canvas context");
+  console.error("Falha ao obter o contexto do canvas");
 }
 
-// Define the size of the canvas
+// Define o tamanho do canvas
 canvas.width = 800;
 canvas.height = 400;
 
-// Player configuration
-const player = {
+// Configuração do jogador
+const jogador = {
   x: 50,
   y: canvas.height - 60,
-  width: 50,
-  height: 50,
-  color: "blue",
+  largura: 50,
+  altura: 50,
+  cor: "blue",
   dy: 0,
-  dx: 0,
-  gravity: 0.5,
-  jumpPower: -20,
-  isJumping: false,
-  speed: 5,
+  gravidade: 0.5,
+  poderPulo: -15, // Aumentar o poder do pulo
+  pulando: false,
+  velocidade: 5, // Adicionar propriedade de velocidade
 };
 
-// Syllable configuration
-const syllables = [];
-const syllableList = [
+// Configuração das sílabas
+const silabas = [];
+const listaSilabas = [
   "Ca",
   "Va",
   "Ba",
   "Am",
   "Ar",
   "Al",
-  "Uv",
   "U",
   "Ur",
   "Um",
@@ -67,29 +65,29 @@ const syllableList = [
   "to",
   "nha",
 ];
-
-const validWords = [
-  "cara",
-  "cama",
-  "calo",
-  "cabo",
-  "capa",
-  "caju",
-  "cama",
-  "caso",
-  "carta",
-  "casa",
-  "cano",
-  "cabe",
-  "caro",
-  "cava",
-  "carne",
-  "vaca",
-  "vale",
-  "vago",
-  "vara",
-  "vaza",
-  "vaso",
+//nelson
+const palavrasValidas = [
+  "Cara",
+  "Cama",
+  "Calo",
+  "Cabo",
+  "Capa",
+  "Caju",
+  "Cama",
+  "Caso",
+  "Carta",
+  "Casa",
+  "Cano",
+  "Cabe",
+  "Caro",
+  "Cava",
+  "Carne",
+  "Vaca",
+  "Vale",
+  "Vago",
+  "Vara",
+  "Vaza",
+  "Vaso",
   "Banco",
   "Baile",
   "Barco",
@@ -113,7 +111,6 @@ const validWords = [
   "Alvo",
   "Alma",
   "Andar",
-  "Uva",
   "Unha",
   "Urso",
   "Um",
@@ -122,185 +119,239 @@ const validWords = [
   "Baleia",
   "Arte",
 ];
+// Função para verificar se uma palavra foi formada
+function verificarPalavra() {
+  const palavra = silabasColetadas.join("");
 
-// Variables for score and collected syllables
-let collectedSyllables = [];
-let score = 0;
-let lastSpawnTime = 0;
-let spawnInterval = 2000;
-
-// Draw the player on the canvas
-function drawPlayer() {
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+  if (palavrasValidas.includes(palavra)) {
+    pontuacao += 10;
+    silabasColetadas = [];
+  }
 }
 
-// Generate weighted random syllables
-function getWeightedRandomSyllable() {
-  const totalWeight = syllableList.length;
-  let random = Math.random() * totalWeight;
-  return syllableList[Math.floor(random)];
+const frequenciaSilabas = {};
+
+let silabasColetadas = [];
+let pontuacao = 0;
+let ultimoTempoGeracao = 0;
+let intervaloGeracao = 2000; // Aumentar o intervalo de geração para desacelerar o jogo
+
+// Função para desenhar o jogador
+function desenharJogador() {
+  ctx.fillStyle = jogador.cor;
+  ctx.fillRect(jogador.x, jogador.y, jogador.largura, jogador.altura);
 }
 
-function spawnSyllable() {
-  const minY = canvas.height - player.height - 150;
-  const maxY = canvas.height - player.height - 100;
+// Função para gerar sílabas
+function obterSilabaAleatoriaPonderada() {
+  const quantidadeSilabasJogador = silabasColetadas.length;
+  const pesoTotal = Object.values(frequenciaSilabas).reduce((acc, peso) => acc + peso, 0);
+  let aleatorio = Math.random() * pesoTotal;
 
-  // Logic for spawning syllables based on the collected syllables
-  let syllablePool = [];
-
-  // If the player has 0 syllables, only the first syllables of words appear
-  if (collectedSyllables.length === 0) {
-    syllablePool = syllableList.filter((syllable) =>
-      validWords.some((word) => word.startsWith(syllable))
+  if (quantidadeSilabasJogador === 0) {
+    // Mostrar apenas sílabas iniciais
+    const silabasIniciais = ["Ca", "Va", "Ba", "Am", "Ar", "Al", "Uv", "Un", "Ur", "Um"];
+    const frequenciaFiltrada = Object.fromEntries(
+      Object.entries(frequenciaSilabas).filter(([silaba]) => silabasIniciais.includes(silaba))
     );
-  }
-  // If the player has 1 syllable, only the second syllables of words appear
-  else if (collectedSyllables.length === 1) {
-    syllablePool = syllableList.filter((syllable) =>
-      validWords.some(
-        (word) =>
-          word.includes(collectedSyllables[0]) &&
-          word.split(collectedSyllables[0])[1]?.startsWith(syllable)
-      )
+    const pesoTotalFiltrado = Object.values(frequenciaFiltrada).reduce(
+      (acc, peso) => acc + peso,
+      0
     );
-  }
-  // If the player has more than 1 syllable, allow all syllables, with a higher chance for valid completions
-  else {
-    syllablePool = syllableList;
-  }
+    aleatorio = Math.random() * pesoTotalFiltrado;
+    for (const [silaba, peso] of Object.entries(frequenciaFiltrada)) {
+      if (aleatorio < peso) {
+        return silaba;
+      }
+      aleatorio -= peso;
+    }
+  } else {
+    // Aumentar a probabilidade de sílabas que podem completar a palavra
+    const ultimaSilaba = silabasColetadas[silabasColetadas.length - 1];
+    const finaisPossiveis = palavrasValidas
+      .filter((palavra) => palavra.startsWith(silabasColetadas.join("")))
+      .map((palavra) => palavra.slice(silabasColetadas.join("").length))
+      .flatMap((restante) => restante.split(/(?=[A-Z])/).map((silaba) => silaba.toLowerCase()));
 
-  // Increase the weight of syllables that complete valid words
-  const syllable = {
+    const frequenciaAjustada = { ...frequenciaSilabas };
+    finaisPossiveis.forEach((silaba) => {
+      if (frequenciaAjustada[silaba] !== undefined) {
+        frequenciaAjustada[silaba] *= 10; // Aumentar significativamente a probabilidade
+      }
+    });
+
+    const pesoTotalAjustado = Object.values(frequenciaAjustada).reduce(
+      (acc, peso) => acc + peso,
+      0
+    );
+    aleatorio = Math.random() * pesoTotalAjustado;
+    for (const [silaba, peso] of Object.entries(frequenciaAjustada)) {
+      if (aleatorio < peso) {
+        return silaba;
+      }
+      aleatorio -= peso;
+    }
+  }
+}
+
+function gerarSilaba() {
+  const minY = canvas.height - jogador.altura - 150; // Aumentar a altura mínima acima do solo
+  const maxY = canvas.height - jogador.altura - 100; // Aumentar a altura máxima acima do solo
+  const silaba = {
     x: canvas.width,
-    y: Math.random() * (maxY - minY) + minY,
-    width: 70,
-    height: 70,
-    text: getWeightedRandomSyllable(),
+    y: Math.random() * (maxY - minY) + minY, // Garantir que as sílabas apareçam na faixa capturável
+    largura: 70, // Aumentar o tamanho da sílaba
+    altura: 70, // Aumentar o tamanho da sílaba
+    texto: obterSilabaAleatoriaPonderada(),
   };
-
-  // If the syllable is likely to complete a valid word, increase its chances of appearing
-  if (validWords.some((word) => word === collectedSyllables.join("") + syllable.text)) {
-    syllables.push(syllable);
-  }
+  silabas.push(silaba);
 }
 
-// Draw syllables on the canvas
-function drawSyllables() {
-  syllables.forEach((syllable) => {
+// Função para desenhar sílabas
+function desenharSilabas() {
+  silabas.forEach((silaba) => {
     ctx.fillStyle = "white";
-    ctx.fillRect(syllable.x, syllable.y, syllable.width, syllable.height);
+    ctx.fillRect(silaba.x, silaba.y, silaba.largura, silaba.altura);
     ctx.fillStyle = "black";
     ctx.font = "20px Arial";
     ctx.textAlign = "center";
-    ctx.fillText(
-      syllable.text,
-      syllable.x + syllable.width / 2,
-      syllable.y + syllable.height / 2 + 5
-    );
+    ctx.fillText(silaba.texto, silaba.x + silaba.largura / 2, silaba.y + silaba.altura / 2 + 5);
   });
 }
 
-// Update syllable positions (increased horizontal speed)
-function updateSyllables() {
-  syllables.forEach((syllable, index) => {
-    syllable.x -= 2; // Increase the value to make syllables move faster
-    if (syllable.x + syllable.width < 0) {
-      syllables.splice(index, 1);
+// Função para atualizar a posição das sílabas
+function atualizarSilabas() {
+  silabas.forEach((silaba, indice) => {
+    silaba.x -= 0.575; // Aumentar a velocidade das sílabas em 15%
+    if (silaba.x + silaba.largura < 0) {
+      silabas.splice(indice, 1);
     }
   });
 }
 
-// Check for collisions between the player and syllables
-function checkCollision() {
-  syllables.forEach((syllable, index) => {
+// Função para detectar colisão entre jogador e sílabas
+function verificarColisao() {
+  silabas.forEach((silaba, indice) => {
     if (
-      player.x < syllable.x + syllable.width &&
-      player.x + player.width > syllable.x &&
-      player.y < syllable.y + syllable.height &&
-      player.y + player.height > syllable.y
+      jogador.x < silaba.x + silaba.largura &&
+      jogador.x + jogador.largura > silaba.x &&
+      jogador.y < silaba.y + silaba.altura &&
+      jogador.y + jogador.altura > silaba.y
     ) {
-      collectedSyllables.push(syllable.text);
-      syllables.splice(index, 1);
-      checkWord();
+      silabasColetadas.push(silaba.texto);
+      silabas.splice(indice, 1);
+      verificarPalavra();
+      atualizarFrequenciaSilabas();
     }
   });
 }
-
-// Check if the collected syllables form a valid word
-function checkWord() {
-  const word = collectedSyllables.join("");
-  if (validWords.includes(word)) {
-    score += 10;
-    collectedSyllables = [];
-  }
-}
-
-// Draw the score and collected syllables
-function drawHUD() {
+// Função para desenhar a pontuação e sílabas coletadas
+function desenharHUD() {
   ctx.fillStyle = "white";
   ctx.font = "16px Arial";
   ctx.textAlign = "left";
-  ctx.fillText(`Score: ${score}`, 10, 20);
-  ctx.fillText(`Collected: ${collectedSyllables.join("")}`, 10, 40);
+  ctx.fillText(`Pontuação: ${pontuacao}`, 10, 20);
+  ctx.fillText(`Coletadas: ${silabasColetadas.join("")}`, 10, 40);
 }
 
-// Update the player's position (for jumping and horizontal movement)
-function updatePlayer() {
-  player.y += player.dy;
-  player.dy += player.gravity;
-  player.x += player.dx;
-
-  if (player.y + player.height > canvas.height) {
-    player.y = canvas.height - player.height;
-    player.dy = 0;
-    player.isJumping = false;
-  }
-}
-
-// Main game loop
-function gameLoop(timestamp) {
-  if (timestamp - lastSpawnTime > spawnInterval) {
-    spawnSyllable();
-    lastSpawnTime = timestamp;
-  }
-  updatePlayer();
-  updateSyllables();
-  checkCollision();
-  render();
-  requestAnimationFrame(gameLoop);
-}
-
-// Render the game elements on the canvas
-function render() {
+// Função principal de renderização
+function renderizar() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawPlayer();
-  drawSyllables();
-  drawHUD();
+  desenharJogador();
+  desenharSilabas();
+  desenharHUD();
 }
 
-// Event listener for player input (handling horizontal movement)
+// Função para atualizar a posição do jogador
+function atualizarJogador() {
+  jogador.y += jogador.dy;
+  jogador.dy += jogador.gravidade;
+
+  if (jogador.y + jogador.altura > canvas.height) {
+    jogador.y = canvas.height - jogador.altura;
+    jogador.dy = 0;
+    jogador.pulando = false;
+  }
+}
+function calcularFrequenciaSilabas(listaSilabas, palavrasValidas, quantidadeSilabasJogador) {
+  const frequenciaSilabas = {};
+
+  // Inicializar contagem de frequência
+  listaSilabas.forEach((silaba) => {
+    frequenciaSilabas[silaba] = 0;
+  });
+
+  // Contar ocorrências de sílabas no início das palavras
+  palavrasValidas.forEach((palavra) => {
+    const silabasNaPalavra = palavra.split(/(?=[A-Z])/); // Assumindo que as sílabas são capitalizadas
+    if (silabasNaPalavra.length > 0) {
+      const primeiraSilaba = silabasNaPalavra[0].toLowerCase();
+      if (frequenciaSilabas[primeiraSilaba] !== undefined) {
+        frequenciaSilabas[primeiraSilaba]++;
+      }
+    }
+  });
+
+  // Ajustar frequência com base na quantidade de sílabas do jogador
+  palavrasValidas.forEach((palavra) => {
+    const silabasNaPalavra = palavra.split(/(?=[A-Z])/); // Assumindo que as sílabas são capitalizadas
+    silabasNaPalavra.forEach((silaba, indice) => {
+      const silabaMinuscula = silaba.toLowerCase();
+      if (frequenciaSilabas[silabaMinuscula] !== undefined) {
+        if (indice > 0) {
+          frequenciaSilabas[silabaMinuscula] += quantidadeSilabasJogador;
+        }
+      }
+    });
+  });
+
+  return frequenciaSilabas;
+}
+
+// Função para atualizar a frequência das sílabas com base na quantidade de sílabas do jogador
+function atualizarFrequenciaSilabas() {
+  const quantidadeSilabasJogador = silabasColetadas.length;
+  const frequenciaSilabas = calcularFrequenciaSilabas(
+    listaSilabas,
+    palavrasValidas,
+    quantidadeSilabasJogador
+  );
+  console.log(frequenciaSilabas);
+}
+
+// Loop principal do jogo
+function loopJogo(timestamp) {
+  //console.log("Loop do jogo rodando no timestamp:", timestamp);
+  if (timestamp - ultimoTempoGeracao > intervaloGeracao) {
+    console.log("Gerando nova sílaba");
+    gerarSilaba();
+    ultimoTempoGeracao = timestamp;
+  }
+  atualizarJogador();
+  atualizarSilabas();
+  verificarColisao();
+  renderizar();
+  requestAnimationFrame(loopJogo);
+}
+
+// Detectar entrada do jogador
 document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowUp" && !player.isJumping) {
-    player.dy = player.jumpPower;
-    player.isJumping = true;
+  console.log("Tecla pressionada:", e.key);
+  if (e.key === "ArrowUp" && !jogador.pulando) {
+    jogador.dy = jogador.poderPulo;
+    jogador.pulando = true;
   } else if (e.key === "ArrowDown") {
-    collectedSyllables.pop();
-  } else if (e.key === "ArrowRight") {
-    player.dx = player.speed;
-  } else if (e.key === "ArrowLeft") {
-    player.dx = -player.speed;
+    silabasColetadas.pop();
   }
 });
-
-// Event listener to stop horizontal movement when the key is released
-document.addEventListener("keyup", (e) => {
-  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-    player.dx = 0;
-  }
+listaSilabas.forEach((silaba) => {
+  frequenciaSilabas[silaba] = frequenciaSilabas[silaba] || 1; // Peso padrão é 1
 });
+// Função para gerar sílabas com aleatoriedade ponderada
 
-// Start the game loop after DOM is fully loaded
+// Iniciar o loop do jogo após o carregamento do DOM
 document.addEventListener("DOMContentLoaded", () => {
-  requestAnimationFrame(gameLoop);
+  console.log("DOM totalmente carregado e analisado");
+  atualizarFrequenciaSilabas();
+  requestAnimationFrame(loopJogo); // Alterar esta linha
 });
