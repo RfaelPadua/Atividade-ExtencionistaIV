@@ -22,9 +22,9 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image('gameover', 'assets/Game_Over.png');
         
         this.load.spritesheet('astronautinha', 'assets/Astronautinha.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player', 'assets/nave.png', { frameWidth: 1080, frameHeight: 1080 });
+        this.load.spritesheet('player', 'assets/Nave.png', { frameWidth: 1080, frameHeight: 1080 });
         this.load.spritesheet('inimigo', 'assets/Nave_Inimiga.png', { frameWidth: 1080, frameHeight: 1080 });
-        this.load.spritesheet('explosao', 'assets/explosao.png', { frameWidth: 80, frameHeight: 60 });
+        this.load.spritesheet('explosao', 'assets/Explosao.png', { frameWidth: 80, frameHeight: 60 });
         this.load.spritesheet('tiro', 'assets/Tiro.png', { frameWidth: 64, frameHeight: 64 });
         
 
