@@ -9,13 +9,19 @@ if (!ctx) {
 canvas.width = 800;
 canvas.height = 400;
 
+// Carregar imagens
+const backgroundImg = new Image();
+backgroundImg.src = "background.jpg";
+
+const characterImg = new Image();
+characterImg.src = "character.png";
+
 // Configuração do jogador
 const jogador = {
   x: 50,
   y: canvas.height - 60,
   largura: 50,
   altura: 50,
-  cor: "blue",
   dy: 0,
   gravidade: 0.5,
   poderPulo: -15, // Aumentar o poder do pulo
@@ -64,6 +70,7 @@ const listaSilabas = [
   "la",
   "to",
   "nha",
+  "or",
 ];
 //nelson
 const palavrasValidas = [
@@ -118,6 +125,10 @@ const palavrasValidas = [
   "Ultima",
   "Baleia",
   "Arte",
+  "Arma",
+  "Urna",
+  "Vala",
+  "Arca",
 ];
 // Função para verificar se uma palavra foi formada
 function verificarPalavra() {
@@ -138,8 +149,7 @@ let intervaloGeracao = 2000; // Aumentar o intervalo de geração para desaceler
 
 // Função para desenhar o jogador
 function desenharJogador() {
-  ctx.fillStyle = jogador.cor;
-  ctx.fillRect(jogador.x, jogador.y, jogador.largura, jogador.altura);
+  ctx.drawImage(characterImg, jogador.x, jogador.y, jogador.largura, jogador.altura);
 }
 
 // Função para gerar sílabas
@@ -257,6 +267,7 @@ function desenharHUD() {
 // Função principal de renderização
 function renderizar() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height); // Desenhar o fundo
   desenharJogador();
   desenharSilabas();
   desenharHUD();
@@ -272,7 +283,15 @@ function atualizarJogador() {
     jogador.dy = 0;
     jogador.pulando = false;
   }
+
+  // Limitar o movimento do jogador dentro do canvas
+  if (jogador.x < 0) {
+    jogador.x = 0;
+  } else if (jogador.x + jogador.largura > canvas.width) {
+    jogador.x = canvas.width - jogador.largura;
+  }
 }
+
 function calcularFrequenciaSilabas(listaSilabas, palavrasValidas, quantidadeSilabasJogador) {
   const frequenciaSilabas = {};
 
@@ -342,6 +361,10 @@ document.addEventListener("keydown", (e) => {
     jogador.pulando = true;
   } else if (e.key === "ArrowDown") {
     silabasColetadas.pop();
+  } else if (e.key === "ArrowLeft") {
+    jogador.x -= jogador.velocidade * 2; // Aumentar a velocidade para a esquerda
+  } else if (e.key === "ArrowRight") {
+    jogador.x += jogador.velocidade * 2; // Aumentar a velocidade para a direita
   }
 });
 listaSilabas.forEach((silaba) => {
