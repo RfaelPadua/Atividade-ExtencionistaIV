@@ -5,11 +5,11 @@ if (!ctx) {
   console.error("Failed to get canvas context");
 }
 
-// Define o tamanho do canvas
+// Define the size of the canvas
 canvas.width = 800;
 canvas.height = 400;
 
-// Configuração do jogador
+// Player configuration
 const player = {
   x: 50,
   y: canvas.height - 60,
@@ -17,83 +17,175 @@ const player = {
   height: 50,
   color: "blue",
   dy: 0,
+  dx: 0,
   gravity: 0.5,
-  jumpPower: -15, // Increase jump power
+  jumpPower: -20,
   isJumping: false,
+  speed: 5,
 };
 
-// Configuração das sílabas
+// Syllable configuration
 const syllables = [];
 const syllableList = [
-  "ca",
+  "Ca",
+  "Va",
+  "Ba",
+  "Am",
+  "Ar",
+  "Al",
+  "Uv",
+  "U",
+  "Ur",
+  "Um",
+  "ra",
   "ma",
+  "lo",
+  "bo",
+  "pa",
+  "ju",
+  "so",
+  "ta",
   "sa",
+  "no",
+  "be",
   "ro",
-  "a",
-  "mo",
-  "re",
-  "lo",
-  "mi",
+  "va",
+  "ne",
+  "ca",
+  "le",
   "go",
-  "a",
-  "ma",
   "ri",
-  "ge",
-  "lo",
+  "do",
+  "xo",
+  "so",
+  "te",
+  "ra",
+  "ba",
+  "na",
+  "ro",
+  "la",
+  "to",
+  "nha",
 ];
 
-const syllableFrequency = {
-  ca: 10,
-  ma: 10,
-  sa: 10,
-  ro: 8,
-  a: 15,
-  mo: 8,
-  re: 8,
-  lo: 8,
-  mi: 5,
-  go: 5,
-  ri: 5,
-  ge: 5,
-};
+const validWords = [
+  "cara",
+  "cama",
+  "calo",
+  "cabo",
+  "capa",
+  "caju",
+  "cama",
+  "caso",
+  "carta",
+  "casa",
+  "cano",
+  "cabe",
+  "caro",
+  "cava",
+  "carne",
+  "vaca",
+  "vale",
+  "vago",
+  "vara",
+  "vaza",
+  "vaso",
+  "Banco",
+  "Baile",
+  "Barco",
+  "Bala",
+  "Baco",
+  "Baixo",
+  "Bando",
+  "Baque",
+  "Barão",
+  "Balde",
+  "Bando",
+  "Banca",
+  "Bardo",
+  "Bate",
+  "Batalha",
+  "Amor",
+  "Amigo",
+  "Árvore",
+  "Arroz",
+  "Arco",
+  "Alvo",
+  "Alma",
+  "Andar",
+  "Uva",
+  "Unha",
+  "Urso",
+  "Um",
+  "Uivo",
+  "Ultima",
+  "Baleia",
+  "Arte",
+];
 
+// Variables for score and collected syllables
 let collectedSyllables = [];
 let score = 0;
 let lastSpawnTime = 0;
-let spawnInterval = 2000; // Increase spawn interval to slow down the game
+let spawnInterval = 2000;
 
-// Função para desenhar o jogador
+// Draw the player on the canvas
 function drawPlayer() {
   ctx.fillStyle = player.color;
   ctx.fillRect(player.x, player.y, player.width, player.height);
 }
 
-// Função para gerar sílabas
+// Generate weighted random syllables
 function getWeightedRandomSyllable() {
-  const totalWeight = Object.values(syllableFrequency).reduce((acc, weight) => acc + weight, 0);
+  const totalWeight = syllableList.length;
   let random = Math.random() * totalWeight;
-  for (const [syllable, weight] of Object.entries(syllableFrequency)) {
-    if (random < weight) {
-      return syllable;
-    }
-    random -= weight;
-  }
+  return syllableList[Math.floor(random)];
 }
 
 function spawnSyllable() {
-  const minY = canvas.height - player.height - 150; // Increase minimum height above the ground
-  const maxY = canvas.height - player.height - 100; // Increase maximum height above the ground
+  const minY = canvas.height - player.height - 150;
+  const maxY = canvas.height - player.height - 100;
+
+  // Logic for spawning syllables based on the collected syllables
+  let syllablePool = [];
+
+  // If the player has 0 syllables, only the first syllables of words appear
+  if (collectedSyllables.length === 0) {
+    syllablePool = syllableList.filter((syllable) =>
+      validWords.some((word) => word.startsWith(syllable))
+    );
+  }
+  // If the player has 1 syllable, only the second syllables of words appear
+  else if (collectedSyllables.length === 1) {
+    syllablePool = syllableList.filter((syllable) =>
+      validWords.some(
+        (word) =>
+          word.includes(collectedSyllables[0]) &&
+          word.split(collectedSyllables[0])[1]?.startsWith(syllable)
+      )
+    );
+  }
+  // If the player has more than 1 syllable, allow all syllables, with a higher chance for valid completions
+  else {
+    syllablePool = syllableList;
+  }
+
+  // Increase the weight of syllables that complete valid words
   const syllable = {
     x: canvas.width,
-    y: Math.random() * (maxY - minY) + minY, // Ensure syllables appear in the catchable range
-    width: 70, // Increase syllable size
-    height: 70, // Increase syllable size
+    y: Math.random() * (maxY - minY) + minY,
+    width: 70,
+    height: 70,
     text: getWeightedRandomSyllable(),
   };
-  syllables.push(syllable);
+
+  // If the syllable is likely to complete a valid word, increase its chances of appearing
+  if (validWords.some((word) => word === collectedSyllables.join("") + syllable.text)) {
+    syllables.push(syllable);
+  }
 }
 
-// Função para desenhar sílabas
+// Draw syllables on the canvas
 function drawSyllables() {
   syllables.forEach((syllable) => {
     ctx.fillStyle = "white";
@@ -109,17 +201,17 @@ function drawSyllables() {
   });
 }
 
-// Função para atualizar a posição das sílabas
+// Update syllable positions (increased horizontal speed)
 function updateSyllables() {
   syllables.forEach((syllable, index) => {
-    syllable.x -= 0.5; // Slow down syllable speed
+    syllable.x -= 2; // Increase the value to make syllables move faster
     if (syllable.x + syllable.width < 0) {
       syllables.splice(index, 1);
     }
   });
 }
 
-// Função para detectar colisão entre jogador e sílabas
+// Check for collisions between the player and syllables
 function checkCollision() {
   syllables.forEach((syllable, index) => {
     if (
@@ -135,33 +227,16 @@ function checkCollision() {
   });
 }
 
-// Função para verificar se uma palavra foi formada
+// Check if the collected syllables form a valid word
 function checkWord() {
   const word = collectedSyllables.join("");
-  const validWords = [
-    "cama",
-    "casa",
-    "caro",
-    "carro",
-    "amor",
-    "amarelo",
-    "amigo",
-    "roma",
-    "mora",
-    "rosa",
-    "soma",
-    "mago",
-    "goma",
-    "mar",
-    "ramo",
-  ];
   if (validWords.includes(word)) {
     score += 10;
     collectedSyllables = [];
   }
 }
 
-// Função para desenhar a pontuação e sílabas coletadas
+// Draw the score and collected syllables
 function drawHUD() {
   ctx.fillStyle = "white";
   ctx.font = "16px Arial";
@@ -170,18 +245,11 @@ function drawHUD() {
   ctx.fillText(`Collected: ${collectedSyllables.join("")}`, 10, 40);
 }
 
-// Função principal de renderização
-function render() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawPlayer();
-  drawSyllables();
-  drawHUD();
-}
-
-// Função para atualizar a posição do jogador
+// Update the player's position (for jumping and horizontal movement)
 function updatePlayer() {
   player.y += player.dy;
   player.dy += player.gravity;
+  player.x += player.dx;
 
   if (player.y + player.height > canvas.height) {
     player.y = canvas.height - player.height;
@@ -190,11 +258,9 @@ function updatePlayer() {
   }
 }
 
-// Loop principal do jogo
+// Main game loop
 function gameLoop(timestamp) {
-  console.log("Game loop running at timestamp:", timestamp);
   if (timestamp - lastSpawnTime > spawnInterval) {
-    console.log("Spawning new syllable");
     spawnSyllable();
     lastSpawnTime = timestamp;
   }
@@ -205,19 +271,36 @@ function gameLoop(timestamp) {
   requestAnimationFrame(gameLoop);
 }
 
-// Detectar entrada do jogador
+// Render the game elements on the canvas
+function render() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawPlayer();
+  drawSyllables();
+  drawHUD();
+}
+
+// Event listener for player input (handling horizontal movement)
 document.addEventListener("keydown", (e) => {
-  console.log("Key pressed:", e.key);
   if (e.key === "ArrowUp" && !player.isJumping) {
     player.dy = player.jumpPower;
     player.isJumping = true;
   } else if (e.key === "ArrowDown") {
     collectedSyllables.pop();
+  } else if (e.key === "ArrowRight") {
+    player.dx = player.speed;
+  } else if (e.key === "ArrowLeft") {
+    player.dx = -player.speed;
   }
 });
 
-// Iniciar o loop do jogo após o carregamento do DOM
+// Event listener to stop horizontal movement when the key is released
+document.addEventListener("keyup", (e) => {
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+    player.dx = 0;
+  }
+});
+
+// Start the game loop after DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM fully loaded and parsed");
-  requestAnimationFrame(gameLoop); // Change this line
+  requestAnimationFrame(gameLoop);
 });
