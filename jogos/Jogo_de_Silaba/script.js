@@ -11,10 +11,10 @@ canvas.height = 400;
 
 // Carregar imagens
 const backgroundImg = new Image();
-backgroundImg.src = "background.jpg";
+backgroundImg.src = "assets/background.jpg";
 
 const characterImg = new Image();
-characterImg.src = "character.png";
+characterImg.src = "assets/character.png";
 
 // Configuração do jogador
 const jogador = {
