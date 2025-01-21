@@ -59,11 +59,18 @@ main {
 
 .capa-jg {
   background-color: var(--cor-secundaria);
-
   width: 130px;
   height: 100px;
   border-radius: 25px;
   margin-top: 15px;
+  overflow: hidden; /* Adicionado para garantir que a imagem não ultrapasse os limites da div */
+}
+
+.capa-jg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Adicionado para garantir que a imagem se ajuste ao tamanho da div */
+  border-radius: 25px; /* Adicionado para manter o mesmo border-radius da div */
 }
 
 .nome-jg {
