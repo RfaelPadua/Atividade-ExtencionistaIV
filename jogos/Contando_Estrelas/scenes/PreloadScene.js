@@ -14,7 +14,7 @@ export default class PreloadScene extends Phaser.Scene {
         });
 
         // Carregar os assets
-        this.load.image('fundo_menu', 'assets/Background_Stars.png');
+        this.load.image('fundo_menu', 'assets/Fundo.png');
         this.load.image('fumaca', 'assets/Fumacas_Passantes.png');
         this.load.image('simbolos', 'assets/Simbolos.png');
         this.load.image('titulo', 'assets/Titulo.png');
