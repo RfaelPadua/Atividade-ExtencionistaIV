@@ -26,7 +26,10 @@ export default class GameScene extends Phaser.Scene {
 
     create() {
         const { width, height } = this.sys.game.config; // Obtenha as dimensões do jogo
-        this.fundoMovimento = this.add.tileSprite(0, 0, width, height, 'fundo_menu').setOrigin(0);
+        this.fundoMovimento = this.add.tileSprite(0, 0, width,height, 'fumaca').setOrigin(0);
+        this.add.image(0, 0, 'fundo_menu').setOrigin(0).setDisplaySize(width, height); // Ajuste a imagem ao espaço do jogo
+        
+        
         this.screenWidth = width;
         this.screenHeight = height;
         // Inicializar variáveis
@@ -71,7 +74,7 @@ export default class GameScene extends Phaser.Scene {
         this.asteroids = this.physics.add.group();
 
         // Criar painel de vida e pontuação
-        this.add.image(0, 0, 'painel').setOrigin(0).setDisplaySize(width, height); // Ajuste a imagem ao espaço do jogo
+        this.add.image(0, 0, 'painel').setOrigin(0).setDisplaySize(width , height); // Ajuste a imagem ao espaço do jogo
 
         
         // Criar texto de vida
@@ -197,7 +200,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     update() {
-        this.fundoMovimento.tilePositionY -= 0.5;
+        this.fundoMovimento.tilePositionY -= 5;
         this.asteroids.children.iterate(function (asteroid) {
             if (asteroid) {
                 const direction = new Phaser.Math.Vector2(this.player.x - asteroid.x, this.player.y - asteroid.y);
@@ -205,6 +208,10 @@ export default class GameScene extends Phaser.Scene {
                 const speed = this.velocidadeBase;
                 asteroid.x += direction.x * speed;
                 asteroid.y += direction.y * speed;
+
+                // Calcular o ângulo entre o asteroide e o player
+                const angle = Phaser.Math.Angle.Between(asteroid.x, asteroid.y, this.player.x, this.player.y);
+                asteroid.setRotation(angle - Phaser.Math.DegToRad(90)); // Ajustar a rotação do asteroide
 
                 asteroid.text.x = asteroid.x - asteroid.text.width / 2;
                 asteroid.text.y = asteroid.y + 20;

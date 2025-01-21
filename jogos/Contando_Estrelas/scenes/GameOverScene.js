@@ -18,14 +18,13 @@ export default class GameOverScene extends Phaser.Scene {
 
     botaoContinuar.setInteractive({ useHandCursor: true, pixelPerfect: true });
     botaoContinuar.on('pointerdown', () => {
-      this.fadeOutElements([gameover, botaoContinuar], () => {
+      this.fadeOutElements([gameover, botaoContinuar, this.scoreText], () => {
         this.scene.start('MenuScene');
       });
     });
 
     // Exibir pontuação e onda
-    this.add.text(width / 2, height / 2 + 40, `${this.score}`, { fontSize: '32px', fill: '#ffffff', fontFamily: 'super-dario-advance-4' }).setOrigin(0.5);
-  }
+    this.scoreText = this.add.text(width / 2, height / 2 + 40, `${this.score}`, { fontSize: '32px', fill: '#ffffff', fontFamily: 'super-dario-advance-4' }).setOrigin(0.5);  }
 
   fadeOutElements(elements, callback) {
     this.tweens.add({
