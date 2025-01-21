@@ -57,7 +57,7 @@ export default class GameScene extends Phaser.Scene {
         // Animação para mover o player para a posição desejada
         this.tweens.add({
             targets: this.player,
-            y: height * 0.7,
+            y: height * 0.68,
             duration: 2000,
             ease: 'Power2',
             onComplete: () => {
@@ -75,15 +75,15 @@ export default class GameScene extends Phaser.Scene {
 
         
         // Criar texto de vida
-        this.lifeText = this.add.text(width * 0.43, height * 0.867, '3', { fontSize: '22px', fill: '#ffffff', fontFamily: 'Exo_Space' });
+        this.lifeText = this.add.text(width * 0.43, height * 0.867, '3', { fontSize: '22px', fill: '#ffffff'});
 
         // Criar texto de pontuação
-        this.scoreText = this.add.text(width * 0.27, height * 0.819, '0', { fontSize: '22px', fill: '#ffffff', fontFamily: 'Exo_Space' });
+        this.scoreText = this.add.text(width * 0.27, height * 0.819, '0', { fontSize: '22px', fill: '#ffffff'});
 
 
-        this.ondaText = this.add.text(width * 0.75, height * 0.845, this.onda, { fontSize: '22px', fill: '#fff' });
+        this.ondaText = this.add.text(width * 0.75, height * 0.845, this.onda, { fontSize: '22px', fill: '#ffffff'});
         // Campo de entrada de texto
-        this.inputField = this.add.text(width * 0.5, height * 0.85, '', { fontSize: '32px', fill: '#FFF', fontFamily: 'Exo_Space' });
+        this.inputField = this.add.text(width * 0.5, height * 0.75, '', { fontSize: '32px', fill: '#FFF'});
         this.inputField.setOrigin(0.5, 0);
 
         // Criar evento de teclado
@@ -97,9 +97,9 @@ export default class GameScene extends Phaser.Scene {
 
     comecarOnda() {
         const waveMessage = this.add.text(this.screenWidth / 2, this.screenHeight / 2, `Onda ${this.onda}`, {
-            fontSize: '64px',
+            fontSize: '40px',
             fill: '#ffffff',
-            fontFamily: 'Exo_Space'
+            fontFamily: 'super-dario-advance-4'
         });
         waveMessage.setOrigin(0.5, 0.5);
 
@@ -314,6 +314,10 @@ export default class GameScene extends Phaser.Scene {
     // Reproduz a animação de explosão no local da colisão
         let explosao = this.add.sprite(asteroid.x, asteroid.y, 'explosao');
         explosao.play('explosao_anim');
+        explosao.on('animationcomplete', () => {
+            explosao.destroy();
+        });
+
 
         this.life -= 1;
         this.lifeText.setText(this.life);
@@ -328,6 +332,11 @@ export default class GameScene extends Phaser.Scene {
     }
 
     handleInput(event) {
+        // Ignorar teclas F1, F2, F3
+        if (['F1', 'F2', 'F3'].includes(event.key)) {
+            return;
+        }
+
         if (event.key === 'Enter') {
             this.inputText = '';
             this.inputField.setText(this.inputText);
@@ -353,7 +362,7 @@ export default class GameScene extends Phaser.Scene {
         asteroid.setVelocity(0, 100); // Defina a velocidade do asteroide
         asteroid.result = resultado;
 
-        const text = this.add.text(x, 0, `${num1} ${operador} ${num2}`, { fontSize: '20px', fill: '#ffffff', fontFamily: 'Exo_Space' });
+        const text = this.add.text(x, 0, `${num1} ${operador} ${num2}`, { fontSize: '20px', fill: '#ffffff'});
         asteroid.text = text;
 
         this.asteroids.add(asteroid);

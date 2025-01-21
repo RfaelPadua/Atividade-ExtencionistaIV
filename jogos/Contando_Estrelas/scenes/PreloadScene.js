@@ -27,6 +27,9 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.spritesheet('inimigo', 'assets/Nave_Inimiga.png', { frameWidth: 1080, frameHeight: 1080 });
         this.load.spritesheet('explosao', 'assets/Explosao.png', { frameWidth: 80, frameHeight: 60 });
         this.load.spritesheet('tiro', 'assets/Tiro.png', { frameWidth: 64, frameHeight: 64 });
+
+        this.load.font('super-dario-advance-4', 'assets/super-dario-advance-4.ttf');
+
         
 
         // Esperar o carregamento completo

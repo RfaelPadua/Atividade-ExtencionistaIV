@@ -24,7 +24,7 @@ export default class GameOverScene extends Phaser.Scene {
     });
 
     // Exibir pontuação e onda
-    this.add.text(width / 2, height / 2 + 40, `${this.score}`, { fontSize: '32px', fill: '#ffffff', fontFamily: 'Exo_Space' }).setOrigin(0.5);
+    this.add.text(width / 2, height / 2 + 40, `${this.score}`, { fontSize: '32px', fill: '#ffffff', fontFamily: 'super-dario-advance-4' }).setOrigin(0.5);
   }
 
   fadeOutElements(elements, callback) {
